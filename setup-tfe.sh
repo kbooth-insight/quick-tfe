@@ -4,7 +4,7 @@ set +x
 tfe_email="admin@local.com"
 tfe_password=$(date +%s | sha256sum | base64 | head -c 10 ; echo)
 tfe_username="admin"
-tfe_domain="ptfe-local"
+tfe_domain="localhost"
 
 
 # Setup logging
@@ -40,7 +40,7 @@ cat > /etc/replicated.conf <<EOF
   "DaemonAuthenticationType":     "password",
   "DaemonAuthenticationPassword": "${tfe_password}",
   "TlsBootstrapType":             "self-signed",
-  "TlsBootstrapHostname":         "localhost",
+  "TlsBootstrapHostname":         "${tfe_domain}",
   "BypassPreflightChecks":        true,
   "ImportSettingsFrom":           "/etc/replicated-ptfe.conf",
   "LicenseFileLocation":          "/etc/replicated.rli"
@@ -61,7 +61,7 @@ NOW=$(date +"%FT%T")
 echo "[$NOW]  Sleeping for 5 minutes while PTFE installs."
 sleep 300
 
-while ! curl -ksfS --connect-timeout 5 https://localhost/_health_check; do
+while ! curl -ksfS --connect-timeout 5 https://${tfe_domain}/_health_check; do
     sleep 5
 done
 
@@ -76,7 +76,7 @@ curl -k \
   --header "Content-Type: application/json" \
   --request POST \
   --data '{"username":"'"${tfe_username}"'","email":"'"${tfe_email}"'","password":"'"${tfe_password}"'"}' \
-  https://${tfe_domain}/admin/initial-admin-user?token=${initial_token}
+  https://localhost/admin/initial-admin-user?token=${initial_token}
 
 NOW=$(date +"%FT%T")
 echo "[$NOW]  Finished PTFE user_data script."
