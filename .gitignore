@@ -1,0 +1,7 @@
+**/.vagrant
+
+**/*.rli
+**/*.conf
+
+**/.terraform
+**/*.log
