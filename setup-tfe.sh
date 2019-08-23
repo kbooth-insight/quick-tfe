@@ -2,7 +2,7 @@
 set +x
 
 tfe_email="admin@local.com"
-tfe_password="Cardinal1"
+tfe_password=$(date +%s | sha256sum | base64 | head -c 10 ; echo)
 tfe_username="admin"
 tfe_domain="ptfe-local"
 
