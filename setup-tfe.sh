@@ -6,6 +6,9 @@ tfe_password=$(date +%s | sha256sum | base64 | head -c 10 ; echo)
 tfe_username="admin"
 tfe_domain="localhost"
 
+echo '####################### PASSWORD!!!!! #################'
+echo $tfe_password
+echo '#######################################################'
 
 # Setup logging
 logfile="/tmp/install-ptfe.output"
@@ -76,7 +79,7 @@ curl -k \
   --header "Content-Type: application/json" \
   --request POST \
   --data '{"username":"'"${tfe_username}"'","email":"'"${tfe_email}"'","password":"'"${tfe_password}"'"}' \
-  https://localhost/admin/initial-admin-user?token=${initial_token}
+  https://${tfe_domain}/admin/initial-admin-user?token=${initial_token}
 
 NOW=$(date +"%FT%T")
 echo "[$NOW]  Finished PTFE user_data script."
