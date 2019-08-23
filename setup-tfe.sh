@@ -1,7 +1,11 @@
 #!/bin/bash
 set +x
 
-source ./variables.sh
+tfe_email="admin@local.com"
+tfe_password="Cardinal1"
+tfe_username="admin"
+tfe_domain="ptfe-local"
+
 
 # Setup logging
 logfile="/tmp/install-ptfe.output"
@@ -14,10 +18,10 @@ cat > /etc/replicated-ptfe.conf <<EOF
       "value": "/data"
   },
   "enc_password": {
-    "value": ""
+    "value": "${tfe_password}"
   },
   "hostname": {
-    "value": "localhost"
+    "value": "${tfe_domain}"
   },
   "installation_type": {
     "value": "production"
@@ -34,7 +38,7 @@ EOF
 cat > /etc/replicated.conf <<EOF
 {
   "DaemonAuthenticationType":     "password",
-  "DaemonAuthenticationPassword": "",
+  "DaemonAuthenticationPassword": "${tfe_password}",
   "TlsBootstrapType":             "self-signed",
   "TlsBootstrapHostname":         "localhost",
   "BypassPreflightChecks":        true,
@@ -67,16 +71,12 @@ echo "[$NOW]  PTFE Instance is healthy"
 NOW=$(date +"%FT%T")
 echo "[$NOW]  Create initial site admin"
 
-tfe_email=""
-tfe_password=""
-tfe_username=""
-
 initial_token=$(replicated admin --tty=0 retrieve-iact)
 curl -k \
   --header "Content-Type: application/json" \
   --request POST \
   --data '{"username":"'"${tfe_username}"'","email":"'"${tfe_email}"'","password":"'"${tfe_password}"'"}' \
-  https://localhost/admin/initial-admin-user?token=${initial_token}
+  https://${tfe_domain}/admin/initial-admin-user?token=${initial_token}
 
 NOW=$(date +"%FT%T")
 echo "[$NOW]  Finished PTFE user_data script."
