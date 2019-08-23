@@ -6,7 +6,6 @@ Vagrant.configure("2") do |config|
     vb.cpus = "2"
   end
 
-  config.vm.provision "shell", inline: "echo Hello"
   config.vm.provision "file", source: "setup-tfe.sh", destination: "/tmp/setup-tfe.sh"
   config.vm.provision "file", source: "replicated.rli", destination: "/tmp/replicated.rli"
   config.vm.provision "shell", inline: "sudo chmod +x /tmp/setup-tfe.sh"
