@@ -6,10 +6,6 @@ tfe_password=$(date +%s | sha256sum | base64 | head -c 16 ; echo)
 tfe_username="admin"
 tfe_domain="localhost"
 
-echo '####################### PASSWORD!!!!! #################'
-echo $tfe_password
-echo '#######################################################'
-
 # Setup logging
 logfile="/tmp/install-ptfe.output"
 # exec > $logfile 2>&1
@@ -48,7 +44,11 @@ cat > /etc/replicated.conf <<EOF
   "ImportSettingsFrom":           "/etc/replicated-ptfe.conf",
   "LicenseFileLocation":          "/etc/replicated.rli",
   "SnapshotsStore": "local",
-  "SnapshotsPath": "/data/snapshots"
+  "SnapshotsPath": "/data/snapshots",
+  "SnapshotsSchedule": "*/5 * * * *",
+  "DisableScheduledSnapshots": false,
+  "SnapshotsMaxBackups": 3,
+  "SnapshotsTimeout": 0
 }
 EOF
 
@@ -63,11 +63,11 @@ sudo /tmp/ptfe-install.sh no-proxy private-address=${private_ip} public-address=
 # | tee /tmp/install-ptfe.output
 
 NOW=$(date +"%FT%T")
-echo "[$NOW]  Sleeping for 5 minutes while PTFE installs."
-sleep 300
+echo "[$NOW]  Sleeping for 2 minutes while PTFE installs."
+sleep 120
 
-while ! curl -ksfS --connect-timeout 5 https://${tfe_domain}/_health_check; do
-    sleep 1
+while ! curl -ksf --connect-timeout 5 https://${tfe_domain}/_health_check; do
+    sleep 5
 done
 
 NOW=$(date +"%FT%T")
@@ -85,3 +85,7 @@ curl -k \
 
 NOW=$(date +"%FT%T")
 echo "[$NOW]  Finished PTFE user_data script."
+
+echo '####################### PASSWORD!!!!! #################'
+echo $tfe_password
+echo '#######################################################'
