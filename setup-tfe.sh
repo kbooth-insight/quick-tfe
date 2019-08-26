@@ -46,7 +46,9 @@ cat > /etc/replicated.conf <<EOF
   "TlsBootstrapHostname":         "${tfe_domain}",
   "BypassPreflightChecks":        true,
   "ImportSettingsFrom":           "/etc/replicated-ptfe.conf",
-  "LicenseFileLocation":          "/etc/replicated.rli"
+  "LicenseFileLocation":          "/etc/replicated.rli",
+  "SnapshotsStore": "local",
+  "SnapshotsPath": "/data/snapshots"
 }
 EOF
 
@@ -65,7 +67,7 @@ echo "[$NOW]  Sleeping for 5 minutes while PTFE installs."
 sleep 300
 
 while ! curl -ksfS --connect-timeout 5 https://${tfe_domain}/_health_check; do
-    sleep 5
+    sleep 1
 done
 
 NOW=$(date +"%FT%T")
