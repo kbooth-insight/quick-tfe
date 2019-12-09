@@ -59,7 +59,7 @@ chmod +x /tmp/ptfe-install.sh
 private_ip=`hostname -I | awk '{print $2}'`
 public_ip=`hostname -I | awk '{print $2}'`
 
-sudo /tmp/ptfe-install.sh no-proxy private-address=${private_ip} public-address=${public_ip}
+sudo /tmp/ptfe-install.sh airgap no-proxy private-address=${private_ip} public-address=${public_ip}
 # | tee /tmp/install-ptfe.output
 
 NOW=$(date +"%FT%T")
