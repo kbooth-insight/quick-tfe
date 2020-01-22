@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
   end
 
   # config.vm.define "ptfesecondary" do |config|
-  #   config.vm.box = "ol77"
+  #   config.vm.box = "ubuntu/bionic64"
   #   config.disksize.size = '50GB'
   #   config.vm.network "private_network", ip: "192.168.50.5"
   # end

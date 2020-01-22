@@ -10,8 +10,8 @@ No load balancing yet.  Mainly to test mounted disk mode replication strategies 
 
 Copy license file into repo directory and name it `replicated.rli` (base64 encoded).  This file and all files ending in `*.rli` are ignored, make sure not to check it in some other way.
 
-run the `up.sh`
+run the `run.sh`
 
-username will be `admin@local.com`
+username will be `admin@local.com` for tfe
 password is randomly generated and _in the output of the vagrant up_ for each instance...copy it down so you have it.
 
